@@ -2,17 +2,70 @@ from .powder import lineshape, setuppowder2
 import numpy as np
 from pymatgen.analysis import nmr
 
-def static_zg(tensors, number_of_points, sampling_interval, reference_offset,
-              nt=64, haeberlen=True):
+"""
+    Function involved in generation of NMR line shapes
+    
+    Author : Deepansh Srivastava
+    email : srivastava.89@osu.edu
+"""
+
+def get_iso_zeta_eta(tensors):
+    """
+        Returns the isotropic, anisotropic and asymmetry chielding parameters
+        using the Haeberlen convension.
+        
+        The values are obtained using the 'pymatgen.analysis.nmr.ChemicalShielding
+        method
+    """
+    
+    tensors= np.asarray([[tensor.haeberlen_values.sigma_iso,
+                          tensor.haeberlen_values.zeta,
+                          tensor.haeberlen_values.eta] for tensor in tensors])
+    return tensors[:,0], tensors[:,1], tensors[:,2]
+
+
+
+def create_dimension_vector(dimension):
+    """
+        This method create the dimension vector. Units are not yet supported
+        The input argument is:
+        
+        dimension  : a dictionary with the following acceptable keywords
+            number_of_points  : the number of points along the frequency axis
+            sampling_interval : the sampling interval along the frequency axis
+            reference_offset  : the reference offset along the frequency axis
+        
+        Author : Deepansh Srivastava
+    """
+    number_of_points = dimension['number_of_points']
+    sampling_interval = dimension['sampling_interval']
+    reference_offset = dimension['reference_offset']
+
+    fwidth = np.float64(number_of_points * sampling_interval)
+    m = np.int(number_of_points)
+
+    if m % 2 == 0:
+        fstart = -0.5*fwidth + reference_offset
+    else:
+        fstart = -0.5*(m-1)*fwidth/m + reference_offset
+
+    freq = np.arange(m)*sampling_interval + fstart
+
+    return freq
+
+
+
+def csa_zg_static(tensors, freq_dimension, nt=64):
     
     """
         This method generates and returns a static nuclear shielding spectrum.
         The input arguments are:
         
         tensors  : a list of 'pymatgen.analysis.nmr.ChemicalShielding' tensor object
-        number_of_points  : the number of points along the frequency axis
-        sampling_interval : the sampling interval along the frequency axis
-        reference_offset  : the reference offset along the frequency axis
+        freq_dimension = a dimension dictionary with the following acceptable keywords
+            number_of_points  : the number of points along the frequency axis
+            sampling_interval : the sampling interval along the frequency axis
+            reference_offset  : the reference offset along the frequency axis
         nt : number of triangles used in the interpolation scheme
         
         The NMR powder pattern is generated using powder interpolation scheme
@@ -22,60 +75,57 @@ def static_zg(tensors, number_of_points, sampling_interval, reference_offset,
         Author : Deepansh Srivastava
     """
     
-    tensors  = np.asarray([[tensor.haeberlen_values.sigma_iso,
-                            tensor.haeberlen_values.zeta,
-                            tensor.haeberlen_values.eta] for tensor in tensors])
-                            
-    iso, zeta, eta = tensors[:,0], tensors[:,1], tensors[:,2]
-#    iso += reference_offset
-#    print (iso, zeta, eta)
-#    aniso = np.asarray(aniso, dtype=np.float64)
+    iso, zeta, eta = get_iso_zeta_eta(tensors)
     shape = iso.shape
     
+    sampling_interval = freq_dimension['sampling_interval']
     index = np.where(zeta == 0)
     zeta[index] = sampling_interval*1e-8
     eta[index] = 0.0
-    
+
+
+#    if (np.any(eta > 1)):
+#        print ('error: eta value greater than 1 encountered')
+#        return
 #
-#    aniso = aniso.ravel()
-#    if iso is None:
-#        iso = np.zeros(aniso.size, dtype=np.float64)
-#    else:
-#        iso = np.asarray(iso, dtype=np.float64).ravel()
-#    eta = np.asarray(eta, dtype=np.float64).ravel()
+#    if (np.any(eta < -1)):
+#        print ('error: eta value less than -1 encountered')
+#        return
 
-    if (np.any(eta > 1)):
-        print ('error: eta value greater than 1 encountered')
-        return
-    
-    if (np.any(eta < -1)):
-        print ('error: eta value less than -1 encountered')
-        return
-    
-    fwidth = np.float64(number_of_points * sampling_interval)
-    m = np.int(number_of_points)
+
     nt = np.int(nt)
-
     xr, yr, zr, powamp = setuppowder2(nt)
 
-    if m % 2 == 0:
-        fstart = -0.5*fwidth + reference_offset
-    else:
-        fstart = -0.5*(m-1)*fwidth/m + reference_offset
+    freq = create_dimension_vector(freq_dimension)
 
-    freq = np.arange(m)*sampling_interval + fstart
+    fwidth = freq[-1] - freq[0]
+    fstart = freq[0] -0.5 * sampling_interval
 
-    fstart = fstart -0.5 * sampling_interval
-
-    output = lineshape(m, fstart, fwidth, zeta, eta, iso, \
+    output = lineshape(freq.size, fstart, fwidth, zeta, eta, iso, \
                            xr, yr, zr, powamp)
 
-#    print (output.shape)
     # Normalization
     sumNorm = output[:,0].sum(axis=0)
-#    print (sumNorm)
     output = output/sumNorm
-    return freq, output.reshape(((m,) + shape))
+    return freq, output.reshape(((freq.size,) + shape))
+
+
+
+def csa_maf(tensors, iso_dimension, pi_by_2_dimension, nt=64):
+
+    pi_by_2_freq, output = csa_zg_static(tensors, pi_by_2_dimension, nt=64)
+    iso_freq = create_dimension_vector(iso_dimension)
+    iso, zeta, eta = get_iso_zeta_eta(tensors)
+
+    
+
+    
+
+
+
+
+
+
 
 
 def spinningSideband():
