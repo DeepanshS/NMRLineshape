@@ -1,1 +1,34 @@
-404: Not Found
+{
+  "CSDM": {
+    "dependent_variables": [
+      {
+        "type": "internal",
+        "encoding": "none",
+        "numeric_type": "float32",
+        "components": [
+          [ 
+            0.00000000e+00,
+            5.87785252e-01,
+            9.51056516e-01,
+            9.51056516e-01,
+            5.87785252e-01,
+            1.22464680e-16,
+            -5.87785252e-01,
+            -9.51056516e-01,
+            -9.51056516e-01,
+            -5.87785252e-01
+          ]
+        ]
+      }
+    ],
+    "independent_variables": [
+      {
+        "type": "linearly_sampled",
+        "number_of_points": 10,
+        "sampling_interval": "0.1 s",
+        "quantity": "time"
+      }
+    ],
+    "version": "1.0.0"
+  }
+}
