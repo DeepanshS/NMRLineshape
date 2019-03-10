@@ -13,7 +13,7 @@
     ],
     "independent_variable": [
       {
-        "type": "linearly_sampled",
+        "type": "arbitrary_spacing",
         "values": [
             "-0.28758166 cm",
             "-0.22712233 cm",
