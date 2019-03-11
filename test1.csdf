@@ -23,7 +23,7 @@
     ],
     "independent_variables": [
       {
-        "type": "linear_spacing",
+        "type": "linearly_sampled",
         "number_of_points": 10,
         "sampling_interval": "0.1 s",
         "quantity": "time"
