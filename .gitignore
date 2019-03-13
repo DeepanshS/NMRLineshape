@@ -1,5 +1,5 @@
 # folders #
-__pycache__/
+__pycache__/**
 testFiles/
 docs/source/_build/**
 docs/source/resource/**
@@ -13,6 +13,8 @@ tests/**
 test*.*
 docs/source/_static/**
 docs/source/_templates/**
+*.ipynb_checkpoints/**
+NMRIneraction Sources Cython/.ipynb_checkpoints/**
 
 # Compiled source #
 ###################
@@ -23,6 +25,7 @@ docs/source/_templates/**
 *.o
 *.so
 *.pyc
+*.out
 
 # Packages #
 ############
@@ -36,7 +39,6 @@ docs/source/_templates/**
 *.rar
 *.tar
 *.zip
-*.ipynb_checkpoints
 *.csdf
 *.ipynb
 
@@ -63,3 +65,4 @@ info.txt
 **_test.py
 *.csv
 *.out
+NMRInteraction/1.py

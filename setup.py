@@ -4,7 +4,7 @@ from setuptools import setup, Extension
 # from distutils.extension import Extension
 from Cython.Distutils import build_ext
 # from Cython.Build import cythonize
-
+from os import path
 
 from Cython.Compiler import Options
 
@@ -15,45 +15,33 @@ from os import listdir
 from os.path import isfile, join
 
 
-library_name = "NMRinteraction"
-#location = '/Users/deepanshsrivastava/Library/Developer/Xcode/DerivedData/'
-# object_directories = "./lib"
-# object_files = [file for file in listdir(object_directories) if file.endswith(".a")]
-# objects = [object_directories+file for file in object_files]
+library_name = "NMRLineshape"
 
-# print ('libraries included')
-# print (objects)
-# print ('------------------------------------------------------------------------')
-
-include_directories = ["./NMRinteraction/NuclearShielding"]
+include_directories = ["./NMRinteraction/include"]
 include_directories.append(numpy.get_include())
-# include_directories.append(object_directories + "include/")
 
-print ('location of include files')
-print (include_directories)
-print ('------------------------------------------------------------------------')
 
-path_to_pyx_files = library_name + " Sources Cython/"
-pyx_file = [path_to_pyx_files + "c_CSA_static_lineshape.pyx"]
-print ('Cython file')
-print (pyx_file)
-print ('------------------------------------------------------------------------')
-print ()
+source_files = []
 
-source_file = []
-source_file_dir = 'NMRinteraction/NuclearShielding/'
-for _file in listdir(source_file_dir):
-      if _file.endswith(".c"):
-            source_file.append(source_file_dir+_file)
+source_file_dir = ['NMRinteraction/NuclearShielding/',
+                   'NMRinteraction/base_c/',
+                  ]
 
-for item in pyx_file:
-      source_file.append(item)
+for _dir in source_file_dir:
+      for _file in listdir(_dir):
+            filename = path.splitext(_file)[0]
+            if _file.endswith(".c") and filename[:6] != 'cython':
+                  source_files.append(_dir+_file)
+            if _file.endswith(".pyx"):
+                  source_files.append(_dir+_file)
 
-print (source_file)
+print("Source files----------------------------------")
+for item in source_files:
+      print(item)
 
 ext_modules = [Extension(
              name=library_name,
-             sources=source_file,
+             sources=source_files,
             #  include_dirs=[numpy.get_include()],
             #  extra_objects= objects, # ["fc.o"],  # if you compile fc.cpp separately
              include_dirs = include_directories,  # .../site-packages/numpy/core/include
@@ -66,10 +54,10 @@ ext_modules = [Extension(
 setup(
       name = library_name,
       cmdclass = {'build_ext': build_ext},
-      ext_modules = ext_modules
+      ext_modules = ext_modules,
       # ext_modules = cythonize(ext_modules)  ? not in 0.14.1
-      # version=
-      # description=
-      # author=
-      # author_email=
+      version = '0.0.1a0',
+      description = 'NMR lineshape simulator',
+      author = 'Deepansh Srivastava',
+      author_email= 'srivastava.89@osu.edu'
       )
