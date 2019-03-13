@@ -13,6 +13,7 @@ tests/**
 docs/source/_static/**
 docs/source/_templates/**
 *.ipynb_checkpoints/**
+.DS_Store/**
 
 # Compiled source #
 ###################
