@@ -38,7 +38,6 @@ docs/source/_templates/**
 *.tar
 *.zip
 *.csdf
-*.ipynb
 
 # Logs and databases #
 ######################
