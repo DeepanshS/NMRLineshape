@@ -49,3 +49,7 @@ This will print the following
 and render a plot (matplotlib is required for the plot).
 
 ![alt text](_static/Figure_1.png)
+
+See also
+
+[Jupyter notebook file](./test_csa_static_lineshape.ipynb)
