@@ -52,4 +52,4 @@ and render a plot (matplotlib is required for the plot).
 
 See also
 
-[Jupyter notebook file](./test_csa_static_lineshape.ipynb)
+[Jupyter notebook file](https://github.com/DeepanshS/NMRLineshape/blob/master/test_csa_static_lineshape.ipynb)
