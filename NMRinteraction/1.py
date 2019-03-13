@@ -11,11 +11,9 @@ from pymatgen.analysis import nmr
 
 def get_iso_zeta_eta(tensors):
     """
-        Returns the isotropic, anisotropic and asymmetry chielding parameters
-        using the Haeberlen convension.
+        Returns the isotropic, anisotropic and asymmetry parameters of a second rank
+        tensor using the Haeberlen convension.
         
-        The values are obtained using the 'pymatgen.analysis.nmr.ChemicalShielding
-        method
     """
     
     tensors= np.asarray([[tensor.haeberlen_values.sigma_iso,
@@ -34,8 +32,6 @@ def create_dimension_vector(dimension):
             number_of_points  : the number of points along the frequency axis
             sampling_interval : the sampling interval along the frequency axis
             reference_offset  : the reference offset along the frequency axis
-        
-        Author : Deepansh Srivastava
     """
     number_of_points = dimension['number_of_points']
     sampling_interval = dimension['sampling_interval']
@@ -71,8 +67,6 @@ def csa_zg_static(tensors, freq_dimension, nt=64):
         The NMR powder pattern is generated using powder interpolation scheme
         of Alderman, Solum and Grant, J. Chem. Phys, 84, 1985.
         DOI : 10.1063/1.450211
-        
-        Author : Deepansh Srivastava
     """
     
     iso, zeta, eta = get_iso_zeta_eta(tensors)

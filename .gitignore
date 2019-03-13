@@ -1,0 +1,65 @@
+# folders #
+__pycache__/
+testFiles/
+docs/source/_build/**
+docs/source/resource/**
+docs/build/**
+csdfpy.egg-info/**
+.eggs/**
+build/**
+dist/**
+test_files/**
+tests/**
+test*.*
+docs/source/_static/**
+docs/source/_templates/**
+
+# Compiled source #
+###################
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+*.pyc
+
+# Packages #
+############
+# it's better to unpack these files and commit the raw source
+# git has its own built in compression methods
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+*.ipynb_checkpoints
+*.csdf
+*.ipynb
+
+# Logs and databases #
+######################
+*.log
+*.sql
+*.sqlite
+
+# OS generated files #
+######################
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+*.DS_Store*
+
+# files
+files.txt
+info.txt
+**_test.py
+*.csv
+*.out
